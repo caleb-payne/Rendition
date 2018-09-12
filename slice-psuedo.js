@@ -12,48 +12,49 @@
 //here's how to bake a new sheet...
 
 
-function bakeNewSheet(path,xRes,yRes) {
-
-	//find the right canvas element
-	//use "path" argument
+function bakeNewSheet(canvObj,xRes,yRes) {
 
 	//get dimensions of canvas element
-
+    var canvasImageWidth = canvObj.width;
+    var canvasImageHeight = canvObj.height;
+        
 	//determine how large the slices will be
 	var xStep = canvasImageWidth/xRes;
 	var yStep = canvasImageHeight/yRes;
 
 	//create new array for the SHEET with dimensions (xRes, yRes)
+    //what's the best way to create an array here?
     var sheetOutTheOven = new Array(xRes);
 
 	for (var i=0; i++; i<xRes) {
 
 		//create new STRIP array in terms of i
+        //again, what's the best way?
+        var strip = new Array(yRes);
 
 		for (var j=0; j++; j<yRes){
 
 			//sample canvas area at (i * xStep, j * yStep) with dim (xStep,yStep)
-
-			//might have to round or floor those values ^
-
-			//average the sampled data if canvas doesn't do it for you
-
-			//create new SLICE array with sampled data..
-			//may need another for() loop
-
-			//add SLICE to STRIP (with index j)
+            //might have to round or floor these values
+            
+            var locationX = i * xStep;
+            var locationY = j * yStep;
+            
+            var context = canvObj.getContext('2d');
+            var slice = context.getImageData(locationX, locationY, xStep, yStep).data; 
+			
+            
+            //add slice to strip array
+            //best way to do this?? should we use push() instead?
+			strip[j] = slice;
 		}
 
 		//add STRIP to SHEET (with index i)
+        sheetOutTheOven[i] = strip;
 	}
 
 	return sheetOutTheOven;
 }
-
-
-
-
-
 
 
 
